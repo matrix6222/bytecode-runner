@@ -81,7 +81,7 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
   
     LDR X0, [X1, X2]          ; offset         ; load from X1 + X2
     LDR X0, [X1, X2, LSL #3]  ; shifted-offset ; load from X1 + (X2 << 3)
-    LDR X0, [X1, W0, UXTW #3] ; shifted-offset ; load from X1 + (W2 << 3)
+    LDR X0, [X1, W2, UXTW #3] ; shifted-offset ; load from X1 + (W2 << 3)
     ```
 ### Load a pair of values from memory
 - The `imm` value must be divisible by 8 for `X` registers and by 4 for `W` registers.
@@ -91,6 +91,46 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
     LDP X0, X1, [X2, #16]  ; offset     ; X0 = [X2 + 16], X1 = [X2 + 16 + 8], X2 = X2
     LDP X0, X1, [X2, #16]! ; pre-index  ; X0 = [X2 + 16], X1 = [X2 + 16 + 8], X2 = X2 + 16
     LDP X0, X1, [X2], #16  ; post-index ; X0 = [X2],      X1 = [X2 + 8],      X2 = X2 + 16
+  
+    LDP X0, X1, msg       ; incorrect
+    LDP X0, X1, #0        ; incorrect
+  
+    LDP X0, X1, [X2, X3]          ; incorrect
+    LDP X0, X1, [X2, X3, LSL #3]  ; incorrect
+    LDP X0, X1, [X2, W3, UXTW #3] ; incorrect
+    ```
+### Store value to memory
+- The `imm` value must be divisible by 1.
+- There's no store to label or `PC + imm`.
+- `LSL`, `UXTW` must be `#0` or `#3` for `X` source register and `#0` or `#2` for `W` source register.
+  ```ASM
+  STR X0, [X1]      ; normal     ; store to X1,      X1 = X1
+  STR X0, [X1, #8]  ; offset     ; store to X1 +  8, X1 = X1
+  STR X0, [X1, #8]! ; pre-index  ; store to X1 +  8, X1 = X1 + 8
+  STR X0, [X1], #8  ; post-index ; store to X1,      X1 = X1 + 8
+  
+  STR X0, msg       ; incorrect
+  STR X0, #0        ; incorrect
+  
+  STR X0, [X1, X2]          ; offset         ; store to X1 + X2
+  STR X0, [X1, X2, LSL #3]  ; shifted-offset ; store to X1 + (X2 << 3)
+  STR X0, [X1, W2, UXTW #3] ; shifted-offset ; store to X1 + (W2 << 3)
+  ```
+### Store a pair of values to memory
+- The `imm` value must be divisible by 8 for `X` registers and by 4 for `W` registers.
+- There's no store to label or offset by register.
+    ```ASM
+    STP X0, X1, [X2]       ; normal     ; [X2] = X0,      [X2 + 8] = X1,      X2 = X2
+    STP X0, X1, [X2, #16]  ; offset     ; [X2 + 16] = X0, [X2 + 16 + 8] = X1, X2 = X2
+    STP X0, X1, [X2, #16]! ; pre-index  ; [X2 + 16] = X0, [X2 + 16 + 8] = X1, X2 = X2 + 16
+    STP X0, X1, [X2], #16  ; post-index ; [X2] = X0,      [X2 + 8] = X1,      X2 = X2 + 16
+
+    STP X0, X1, msg       ; incorrect
+    STP X0, X1, #0        ; incorrect
+  
+    STP X0, X1, [X2, X3]          ; incorrect
+    STP X0, X1, [X2, X3, LSL #3]  ; incorrect
+    STP X0, X1, [X2, W3, UXTW #3] ; incorrect
     ```
 ### Get address
 - Calculated during compilation.
