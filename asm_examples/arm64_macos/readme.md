@@ -77,6 +77,7 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
     LDR X0, [X1], #8  ; post-index ; load from X1,      X1 = X1 + 8
     
     LDR X0, msg       ; normal     ; load from msg, label must be in the same segment
+    LDR X0, #0        ; normal     ; load from PC + imm, imm must be divisible by 4
   
     LDR X0, [X1, X2]          ; offset         ; load from X1 + X2
     LDR X0, [X1, X2, LSL #3]  ; shifted-offset ; load from X1 + (X2 << 3)
