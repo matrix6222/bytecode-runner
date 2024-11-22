@@ -69,6 +69,7 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
   ```
 ### Load value from memory
 - The `imm` value must be divisible by 1.
+- `LSL`, `UXTW` must be `#0` or `#3` for `X` and `#0` or `#2` for `W`.
     ```ASM
     LDR X0, [X1]      ; normal     ; load from X1,      X1 = X1
     LDR X0, [X1, #8]  ; offset     ; load from X1 +  8, X1 = X1
@@ -76,7 +77,10 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
     LDR X0, [X1], #8  ; post-index ; load from X1,      X1 = X1 + 8
     
     LDR X0, msg       ; normal     ; load from msg, label must be in the same segment
-    LDR X0, [X1, X2]  ; offset     ; load from X1 + X2, X1 = X1
+  
+    LDR X0, [X1, X2]          ; offset         ; load from X1 + X2
+    LDR X0, [X1, X2, LSL #3]  ; shifted-offset ; load from X1 + (X2 << 3)
+    LDR X0, [SP, W0, UXTW #3] ; shifted-offset ; load from X1 + (W2 << 3)
     ```
 ### Load a pair of values from memory
 - The `imm` value must be divisible by 8 for `X` registers and by 4 for `W` registers.
