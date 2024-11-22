@@ -1,6 +1,9 @@
 # MacOS arm64
 ## Key notes
-- When using `ADRP + ADD`, the page offset to the label must be calculated manually.
+- When writing shellcode, prefer using `ADR` instead of `ADRP + ADD`.
+- With `ADRP + ADD`, the offset to the label must be calculated manually. To do this:
+  - Use `ADRP X0, #0x0` to load the page containing the shellcode into `X0`. The compiler automatically provides this instruction, it is modified during the linking process. This gives you the base address of the shellcode.
+  - Then, add the offset to the label. Since the label is placed right after the executable code in shellcode, this offset equals the length of the executable code. `ADD X0, X0, #28`
 - The `ADR` instruction calculates the offset to the label automatically, but the label must be in the same section (do not place the label in the `.data` section if the instruction is in `.text`).
 - Compile locally rather than online.
 ### Compilation
@@ -85,7 +88,7 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
     LDP X0, X1, [X2], #16  ; post-index ; X0 = [X2],      X1 = [X2 + 8],      X2 = X2 + 16
     ```
 ### Get address
-- Calculated during compilation
+- Calculated during compilation.
   - The label must be placed in the same segment, e.g., `.text`.
   - The maximum value of `imm` is 2**20 - 1.
   - `PC` points to the beginning of the `ADR` instruction.
@@ -93,9 +96,19 @@ Probably also `X8` but max number of arguments in syscalls.master is 8.
       ADR X0, msg        ; X0 = PC + offset to label
       ADR X0, #7         ; X0 = PC + imm
       ```
-- Calculated during linking
+- Calculated during linking.
   - The label can be placed in a different segment, e.g., `.data`.
     ```ASM
     ADRP X0, msg@PAGE
     ADD X0, X0, msg@PAGEOFF
     ```
+### Automatic string length calculation
+- Calculated during compilation.
+- It can be used in `.data` and `.text` sections.
+- It does not generate any additional code, it simply replaces `#msg_len` with `#13`.
+  ```ASM
+  MOV X2, #msg_len
+  
+  msg: .ascii "Hello world!\n"
+  .equ msg_len, . -msg
+  ```
