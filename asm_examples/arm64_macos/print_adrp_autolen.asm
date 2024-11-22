@@ -2,7 +2,8 @@
 .align 4
 .text
 
-_main: ; void print();
+// void print();
+_main:
 	MOV X0, #1
 	ADRP X1, msg@PAGE
 	ADD X1, X1, msg@PAGEOFF

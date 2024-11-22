@@ -1,6 +1,7 @@
 .align 4
 
-print: ; void print();
+// void print();
+print:
 	MOV X0, #1
 	ADR X1, msg
 	MOV X2, #13
