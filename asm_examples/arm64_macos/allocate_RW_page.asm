@@ -1,5 +1,6 @@
 .align 4
 
+// void print();
 _main:
 	; allocate RW data section
     MOV X0, #0       ; addr: NULL (let kernel choose the address)
