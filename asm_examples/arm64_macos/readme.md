@@ -5,6 +5,7 @@
   - Use `ADRP X0, #0x0` to load the page containing the shellcode into `X0`. The compiler automatically provides this instruction, it is modified during the linking process. This gives you the base address of the shellcode.
   - Then, add the offset to the label. Since the label is placed right after the executable code in shellcode, this offset equals the length of the executable code. `ADD X0, X0, #28`
 - The `ADR` instruction calculates the offset to the label automatically, but the label must be in the same section (do not place the label in the `.data` section if the instruction is in `.text`).
+- `PC` points to the beginning of the `ADR` instruction.
 - Compile locally rather than online.
 ### Compilation
 - Online compilers:
