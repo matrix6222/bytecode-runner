@@ -34,6 +34,7 @@
   LEA RBX, UNICODE_STRING ; address of UNICODE_STRING
   MOV [RBX + 8], RAX      ; UNICODE_STRING->Buffer = address of filename
   ```
+- `RIP` points to begin of next instruction.
 - Compile locally rather than online.
 ### Compilation
 - Online compilers:
