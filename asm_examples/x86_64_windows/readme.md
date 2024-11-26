@@ -76,7 +76,7 @@
   MOV RAX, 85                     ; SYSCALL NUMBER
   SUB RSP, 8                      ; Additional 8 bytes on the stack
   SYSCALL
-  RSP, 32 + 2 * 8 + 8             ; shadow space + 2 args on the stack + 8 bytes
+  ADD RSP, 32 + 2 * 8 + 8         ; shadow space + 2 args on the stack + 8 bytes
   ```
 ## ASM notes
 - `RIP` offset always calculated in linking process
@@ -87,8 +87,8 @@
   MOV RAX, VAL_DATA    ; get QD value of label `VAL_DATA`
   MOV RAX, [VAL_DATA]  ; get QD value of label `VAL_DATA`
   
-  ;LEA RAX, VAL_DATA   ; get address of label 'VAL_DATA'
-  ;LEA RAX, [VAL_DATA] ; get address of label 'VAL_DATA'
+  LEA RAX, VAL_DATA   ; get address of label 'VAL_DATA'
+  LEA RAX, [VAL_DATA] ; get address of label 'VAL_DATA'
   
   ; label in .CODE
   MOV RAX, VAL_CODE    ; get QD value of label `VAL_CODE`
