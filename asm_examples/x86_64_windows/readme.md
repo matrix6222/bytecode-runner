@@ -41,14 +41,14 @@
   - https://shell-storm.org/online/Online-Assembler-and-Disassembler/ (x86 (64))
 - Compile locally without linking
   ```bash
-  cd bytecode_examples
+  cd asm_examples
   ml64 /c /Fo temp/prog.obj x86_64_windows/prog.asm
   objdump -M intel --insn-width=16 -d temp/prog.obj  # Disassemble to see the instructions
   objdump -s temp/prog.obj                           # Display hex of .code and .data
   ```
 - Compile locally with linking (to executable)
   ```bash
-  cd bytecode_examples
+  cd asm_examples
   ml64 x86_64_windows/prog.asm /link /ENTRY:main /BASE:0x0 /OUT:temp/prog.exe
   objdump -M intel --insn-width=16 -d temp/prog.exe  # Disassemble to see the instructions
   objdump -s temp/prog.exe                           # Display hex of .code and .data
